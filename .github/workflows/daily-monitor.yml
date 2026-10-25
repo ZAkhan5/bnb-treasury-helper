@@ -1,0 +1,36 @@
+name: Daily health reports
+
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-health-monitor
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CHAIN_ID: '97'
+      MOCK_MODE: 'false'
+      RPC_URL: ${{ secrets.RPC_URL }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      HEALTH_REPORT_ADDRESS: ${{ secrets.HEALTH_REPORT_ADDRESS }}
+      WATCHLIST: ${{ secrets.WATCHLIST }}
+      VENUS_COMPTROLLER_ADDRESS: ${{ secrets.VENUS_COMPTROLLER_ADDRESS }}
+      VENUS_ORACLE_ADDRESS: ${{ secrets.VENUS_ORACLE_ADDRESS }}
+      VENUS_BNB_MARKET_ADDRESS: ${{ secrets.VENUS_BNB_MARKET_ADDRESS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run monitor

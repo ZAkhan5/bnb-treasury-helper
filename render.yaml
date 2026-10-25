@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: bnb-treasury-helper
+    runtime: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CHAIN_ID
+        value: '97'
+      - key: MOCK_MODE
+        value: 'false'
+      - key: RPC_URL
+        sync: false
+      - key: VENUS_COMPTROLLER_ADDRESS
+        sync: false
+      - key: VENUS_ORACLE_ADDRESS
+        sync: false
+      - key: VENUS_BNB_MARKET_ADDRESS
+        sync: false
+      - key: OWNER_ADDRESS
+        sync: false
+      - key: ERC8004_REGISTRY_ADDRESS
+        sync: false
+      - key: ERC8004_AGENT_ID
+        sync: false
